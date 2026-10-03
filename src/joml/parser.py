@@ -13,10 +13,12 @@ class Stop:
 
     :attr place_name: The name of the place.
     :attr date: The date the stop is reached.
+    :attr time: The time the stop is reached, if specified.
     """
 
     place_name: str
     date: datetime.date
+    time: datetime.time | None = None
 
     def __str__(self):
         return f"{self.place_name} ({self.date})"
@@ -75,6 +77,7 @@ class CurrentAction(Enum):
     EXPECTING_DESTINATION = 2
     EXPECTING_MODE_OF_TRANSPORT = 3
     EXPECTING_SOURCE = 4
+    EXPECTING_TIME = 5
 
 
 def parse(tokens: list[Token]) -> list[Journey]:
@@ -94,8 +97,10 @@ def parse(tokens: list[Token]) -> list[Journey]:
     current_legs: list[Leg] = []
     current_origin_place_name: str | None = None
     current_origin_date: datetime.date | None = None
+    current_origin_time: datetime.time | None = None
     current_destination_place_name: str | None = None
     current_destination_date: datetime.date | None = None
+    current_destination_time: datetime.time | None = None
     current_mode_of_transport: str | None = None
 
     def append_current_leg():
@@ -103,8 +108,10 @@ def parse(tokens: list[Token]) -> list[Journey]:
             current_legs, \
             current_origin_place_name, \
             current_origin_date, \
+            current_origin_time, \
             current_destination_place_name, \
-            current_destination_date
+            current_destination_date, \
+            current_destination_time
 
         if current_origin_place_name is None:
             raise ValueError("No origin stop is defined yet")
@@ -117,9 +124,15 @@ def parse(tokens: list[Token]) -> list[Journey]:
         elif current_mode_of_transport is None:
             raise ValueError("No mode of transport is defined yet")
 
-        origin = Stop(place_name=current_origin_place_name, date=current_origin_date)
+        origin = Stop(
+            place_name=current_origin_place_name,
+            date=current_origin_date,
+            time=current_origin_time,
+        )
         destination = Stop(
-            place_name=current_destination_place_name, date=current_destination_date
+            place_name=current_destination_place_name,
+            date=current_destination_date,
+            time=current_destination_time,
         )
 
         current_legs.append(
@@ -132,7 +145,9 @@ def parse(tokens: list[Token]) -> list[Journey]:
 
         current_origin_place_name = current_destination_place_name
         current_origin_date = current_destination_date
+        current_origin_time = None
         current_destination_place_name = None
+        current_destination_time = None
 
     def append_current_journey():
         nonlocal \
@@ -141,8 +156,10 @@ def parse(tokens: list[Token]) -> list[Journey]:
             current_legs, \
             current_origin_place_name, \
             current_origin_date, \
+            current_origin_time, \
             current_destination_place_name, \
             current_destination_date, \
+            current_destination_time, \
             current_mode_of_transport
 
         append_current_leg()
@@ -153,8 +170,10 @@ def parse(tokens: list[Token]) -> list[Journey]:
         current_legs = []
         current_origin_place_name = None
         current_origin_date = None
+        current_origin_time = None
         current_destination_place_name = None
         current_destination_date = None
+        current_destination_time = None
         current_mode_of_transport = None
 
     def handle_date(token):
@@ -170,6 +189,21 @@ def parse(tokens: list[Token]) -> list[Journey]:
         else:
             raise ValueError("Unexpected date")
 
+    def handle_time(token):
+        nonlocal current_action, current_origin_time, current_destination_time
+
+        if current_action == CurrentAction.EXPECTING_TIME:
+            time = datetime.time.fromisoformat(token.value)
+
+            if current_destination_place_name is None:
+                current_origin_time = time
+            else:
+                current_destination_time = time
+
+            current_action = CurrentAction.EXPECTING_DESCRIPTOR
+        else:
+            raise ValueError("Unexpected time")
+
     def handle_keyword(token):
         nonlocal current_action, current_mode_of_transport, is_first_from, is_first_to
 
@@ -177,6 +211,8 @@ def parse(tokens: list[Token]) -> list[Journey]:
             raise ValueError(f"Unexpected keyword '{token.value}'")
 
         match token.value:
+            case "at":
+                current_action = CurrentAction.EXPECTING_TIME
             case "by":
                 current_action = CurrentAction.EXPECTING_MODE_OF_TRANSPORT
             case "from":
@@ -222,6 +258,8 @@ def parse(tokens: list[Token]) -> list[Journey]:
                 handle_keyword(token)
             case TokenType.STRING:
                 handle_string(token)
+            case TokenType.TIME:
+                handle_time(token)
 
     append_current_journey()
 
