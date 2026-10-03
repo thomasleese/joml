@@ -1,0 +1,56 @@
+import re
+from enum import Enum
+from typing import NamedTuple
+
+
+class TokenType(Enum):
+    DATE = 1
+    KEYWORD = 2
+    STRING = 3
+
+
+class Token(NamedTuple):
+    type: TokenType
+    value: str
+
+
+KEYWORDS = ["by", "from", "on", "to"]
+DATE_PATTERN = r"\d{4}-\d{2}-\d{2}"
+
+
+def tokenise(s: str) -> list[Token]:
+    tokens = []
+    i = 0
+    n = len(s)
+
+    while i < n:
+        if s[i].isspace():
+            i += 1
+            continue
+
+        if s[i] == "#":
+            while i < n and s[i] != "\n":
+                i += 1
+            continue
+
+        if i + 9 < n and re.match(DATE_PATTERN, s[i : i + 10]):
+            tokens.append(Token(TokenType.DATE, s[i : i + 10]))
+            i += 10
+            continue
+
+        for keyword in KEYWORDS:
+            if s[i : i + len(keyword)].lower() == keyword and (
+                i + len(keyword) == n or not s[i + len(keyword)].isalpha()
+            ):
+                tokens.append(Token(TokenType.KEYWORD, keyword))
+                i += len(keyword)
+                continue
+
+        j = i
+        while j < n and not s[j].isspace() and s[j] not in ["#"]:
+            j += 1
+        if j > i:
+            tokens.append(Token(TokenType.STRING, s[i:j]))
+        i = j
+
+    return tokens
