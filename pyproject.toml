@@ -1,0 +1,14 @@
+[project]
+name = "waymark"
+version = "0.1.0"
+description = "A markup language for describing journeys"
+readme = "README.md"
+authors = [
+    { name = "Thomas Leese", email = "thomas@leese.io" }
+]
+requires-python = ">=3.14"
+dependencies = []
+
+[build-system]
+requires = ["uv_build>=0.12.18,<0.13.0"]
+build-backend = "uv_build"
