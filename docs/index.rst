@@ -7,6 +7,7 @@ A markup language for describing journeys.
    :maxdepth: 2
 
    usage
+   examples
    api
 
 Indices and tables
