@@ -1,14 +1,22 @@
-name: Test
+name: Release
 
-on: [pull_request]
-
-permissions:
-  contents: read
+on:
+  push:
+    tags:
+      - v*
 
 jobs:
-  pytest:
-    name: Pytest
+  package:
+    name: Package
     runs-on: ubuntu-latest
+
+    environment:
+      name: pypi
+
+    permissions:
+      contents: read
+      id-token: write
+
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -23,15 +31,25 @@ jobs:
         with:
           enable-cache: true
 
-      - name: Install dependencies
-        run: uv sync --locked --all-extras --dev
+      - name: Build
+        run: uv build
 
-      - name: Run pytest
-        run: uv run pytest
+      - name: Publish
+        run: uv publish
 
-  sphinx:
-    name: Sphinx
+  documentation:
+    name: Documentation
     runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    permissions:
+      contents: read
+      id-token: write
+      pages: write
+
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -51,3 +69,15 @@ jobs:
 
       - name: Build documentation
         run: uv run sphinx-build -b html docs docs/_build/html
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/_build/html
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

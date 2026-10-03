@@ -1,3 +1,5 @@
+"""Parse Waymark tokens into journeys."""
+
 import datetime
 from dataclasses import dataclass
 from enum import Enum
@@ -7,6 +9,12 @@ from .tokeniser import Token, TokenType
 
 @dataclass(frozen=True)
 class Stop:
+    """A place at a point in time.
+
+    :attr place_name: The name of the place.
+    :attr date: The date the stop is reached.
+    """
+
     place_name: str
     date: datetime.date
 
@@ -21,6 +29,13 @@ class Stop:
 
 @dataclass(frozen=True)
 class Leg:
+    """A single mode of transport between two stops.
+
+    :attr origin: The stop the leg starts from.
+    :attr destination: The stop the leg ends at.
+    :attr mode_of_transport: How the leg is travelled.
+    """
+
     origin: Stop
     destination: Stop
     mode_of_transport: str
@@ -31,6 +46,11 @@ class Leg:
 
 @dataclass(frozen=True)
 class Journey:
+    """A sequence of legs, travelled in order.
+
+    :attr legs: The legs of the journey, in the order they are travelled.
+    """
+
     legs: list[Leg]
 
     def __lt__(self, other):
@@ -40,10 +60,12 @@ class Journey:
 
     @property
     def origin(self) -> Stop:
+        """The first stop of the journey."""
         return self.legs[0].origin
 
     @property
     def destination(self) -> Stop:
+        """The final stop of the journey."""
         return self.legs[-1].destination
 
 
@@ -56,6 +78,12 @@ class CurrentAction(Enum):
 
 
 def parse(tokens: list[Token]) -> list[Journey]:
+    """Parse a list of Waymark tokens into a list of journeys.
+
+    :param tokens: The tokens to parse.
+    :return: The journeys described by the tokens.
+    :raises ValueError: If the tokens do not describe valid journeys.
+    """
     journeys = []
 
     current_action = CurrentAction.EXPECTING_DESCRIPTOR
