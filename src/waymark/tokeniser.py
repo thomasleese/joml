@@ -1,5 +1,5 @@
 import re
-from enum import Enum
+from enum import Enum, StrEnum
 from typing import NamedTuple
 
 
@@ -9,12 +9,19 @@ class TokenType(Enum):
     STRING = 3
 
 
+class Keyword(StrEnum):
+    BY = "by"
+    FROM = "from"
+    ON = "on"
+    TO = "to"
+
+
 class Token(NamedTuple):
     type: TokenType
     value: str
 
 
-KEYWORDS = ["by", "from", "on", "to"]
+KEYWORDS = [keyword.value for keyword in Keyword]
 DATE_PATTERN = r"\d{4}-\d{2}-\d{2}"
 
 
