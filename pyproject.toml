@@ -1,5 +1,5 @@
 [project]
-name = "waymark"
+name = "joml"
 version = "0.1.0"
 description = "A markup language for describing journeys"
 readme = "README.md"

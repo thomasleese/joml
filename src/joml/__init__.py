@@ -5,9 +5,9 @@ from .tokeniser import tokenise
 
 
 def loads(string):
-    """Parse journeys from a Waymark document.
+    """Parse journeys from a JOML document.
 
-    :param string: A Waymark document.
+    :param string: A JOML document.
     :return: The journeys described by the document, in the order they
         appear.
     """

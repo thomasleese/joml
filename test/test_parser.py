@@ -1,7 +1,7 @@
 from datetime import date
 
-from waymark.parser import parse
-from waymark.tokeniser import tokenise
+from joml.parser import parse
+from joml.tokeniser import tokenise
 
 
 def parse_and_tokenise(string):

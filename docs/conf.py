@@ -1,11 +1,11 @@
-"""Sphinx configuration for the waymark documentation."""
+"""Sphinx configuration for the joml documentation."""
 
 import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-project = "waymark"
+project = "joml"
 copyright = "Thomas Leese"
 author = "Thomas Leese <thomas@leese.io>"
 
@@ -24,4 +24,4 @@ autodoc_member_order = "bysource"
 
 html_theme = "alabaster"
 
-htmlhelp_basename = "waymarkdoc"
+htmlhelp_basename = "jomldoc"

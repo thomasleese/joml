@@ -1,4 +1,4 @@
-Waymark
+JOML
 =======
 
 A markup language for describing journeys.
@@ -8,9 +8,9 @@ Usage
 
 .. code-block:: python
 
-   import waymark
+   import joml
 
-   journeys = waymark.loads("""
+   journeys = joml.loads("""
    From heathrow on 2020-01-01 to gatwick by plane
    To stansted on 2020-01-02 by train
    """)

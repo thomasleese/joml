@@ -1,4 +1,4 @@
-"""Parse Waymark tokens into journeys."""
+"""Parse JOML tokens into journeys."""
 
 import datetime
 from dataclasses import dataclass
@@ -78,7 +78,7 @@ class CurrentAction(Enum):
 
 
 def parse(tokens: list[Token]) -> list[Journey]:
-    """Parse a list of Waymark tokens into a list of journeys.
+    """Parse a list of JOML tokens into a list of journeys.
 
     :param tokens: The tokens to parse.
     :return: The journeys described by the tokens.

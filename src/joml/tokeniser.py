@@ -1,4 +1,4 @@
-"""Tokenise Waymark documents into low-level tokens."""
+"""Tokenise JOML documents into low-level tokens."""
 
 import re
 from enum import Enum, StrEnum
@@ -14,7 +14,7 @@ class TokenType(Enum):
 
 
 class Keyword(StrEnum):
-    """A keyword that delimits parts of a Waymark document."""
+    """A keyword that delimits parts of a JOML document."""
 
     BY = "by"
     FROM = "from"
@@ -23,7 +23,7 @@ class Keyword(StrEnum):
 
 
 class Token(NamedTuple):
-    """A low-level token from a Waymark document.
+    """A low-level token from a JOML document.
 
     :attr type: The type of the token.
     :attr value: The value of the token.
@@ -38,12 +38,12 @@ DATE_PATTERN = r"\d{4}-\d{2}-\d{2}"
 
 
 def tokenise(s: str) -> list[Token]:
-    """Split a Waymark document into a list of tokens.
+    """Split a JOML document into a list of tokens.
 
     Comments, which begin with ``#`` and continue to the end of the line,
     are discarded.
 
-    :param s: A Waymark document.
+    :param s: A JOML document.
     :return: The tokens in the document, in the order they appear.
     """
     tokens = []

@@ -1,4 +1,4 @@
-from waymark.tokeniser import Token, TokenType, tokenise
+from joml.tokeniser import Token, TokenType, tokenise
 
 
 def test_simple():

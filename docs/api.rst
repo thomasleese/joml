@@ -4,33 +4,33 @@ API
 Top-level functions
 -------------------
 
-.. autofunction:: waymark.loads
+.. autofunction:: joml.loads
 
 Journeys
 --------
 
-.. autoclass:: waymark.Journey
+.. autoclass:: joml.Journey
    :members:
 
-.. autoclass:: waymark.Leg
+.. autoclass:: joml.Leg
 
-.. autoclass:: waymark.Stop
+.. autoclass:: joml.Stop
 
 Parser
 ------
 
-.. autofunction:: waymark.parse
+.. autofunction:: joml.parse
 
 Tokeniser
 ---------
 
-.. autofunction:: waymark.tokenise
+.. autofunction:: joml.tokenise
 
-.. autoclass:: waymark.tokeniser.Token
+.. autoclass:: joml.tokeniser.Token
    :members:
 
-.. autoclass:: waymark.tokeniser.TokenType
+.. autoclass:: joml.tokeniser.TokenType
    :members:
 
-.. autoclass:: waymark.tokeniser.Keyword
+.. autoclass:: joml.tokeniser.Keyword
    :members:

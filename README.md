@@ -1,19 +1,19 @@
-# Waymark
+# JOML
 
-A markup language for describing journeys.
+A markup language for describing journeys (**Journey Markup Language**).
 
 ## Installation
 
 ```shell
-$ pip install waymark
+$ pip install joml
 ```
 
 ## Usage
 
 ```python
-import waymark
+import joml
 
-journeys = waymark.loads("""
+journeys = joml.loads("""
 From heathrow on 2020-01-01 to gatwick by plane
 To stansted on 2020-01-02 by train
 """)
@@ -26,7 +26,7 @@ for journey in journeys:
 For more examples, including multiple journeys, comments, and parsing
 low-level tokens, see the [documentation].
 
-[documentation]: https://thomas.leese.io/waymark/
+[documentation]: https://thomas.leese.io/joml/
 
 ## Development
 

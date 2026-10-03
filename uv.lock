@@ -559,7 +559,7 @@ wheels = [
 ]
 
 [[package]]
-name = "waymark"
+name = "joml"
 version = "0.1.0"
 source = { editable = "." }
 
