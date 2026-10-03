@@ -11,11 +11,13 @@ class TokenType(Enum):
     DATE = 1
     KEYWORD = 2
     STRING = 3
+    TIME = 4
 
 
 class Keyword(StrEnum):
     """A keyword that delimits parts of a JOML document."""
 
+    AT = "at"
     BY = "by"
     FROM = "from"
     ON = "on"
@@ -35,6 +37,7 @@ class Token(NamedTuple):
 
 KEYWORDS = [keyword.value for keyword in Keyword]
 DATE_PATTERN = r"\d{4}-\d{2}-\d{2}"
+TIME_PATTERN = r"\d{2}:\d{2}"
 
 
 def tokenise(s: str) -> list[Token]:
@@ -63,6 +66,11 @@ def tokenise(s: str) -> list[Token]:
         if i + 9 < n and re.match(DATE_PATTERN, s[i : i + 10]):
             tokens.append(Token(TokenType.DATE, s[i : i + 10]))
             i += 10
+            continue
+
+        if i + 4 < n and re.match(TIME_PATTERN, s[i : i + 5]):
+            tokens.append(Token(TokenType.TIME, s[i : i + 5]))
+            i += 5
             continue
 
         for keyword in KEYWORDS:
