@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## v0.2.0
 
 - It’s now possible to specify a time on the origin and destination of each leg of the
   journey.
